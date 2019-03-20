@@ -1,0 +1,67 @@
+.page-flexbox-wrapper{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* Imagen LOGO */
+#logo-container img{
+    width: 175px;
+}
+
+/* color de texto de opciones en nav */
+nav ul li a{
+  color: black;
+} 
+/* color del boton de menu en nav */
+nav a {
+    color: black;
+}
+/* imagen de fondo del menu nav */
+#slide-out{
+    background-image: url('../assets/images/escudo2_10pOpacy.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: -50px calc(100% + 20px);
+    background-size: 280px;
+}
+
+.hide-on-screen-and-med{
+  display: none;
+}
+
+/* ******************************** */
+/* MEDIA */
+@media only screen and (max-width: 1350px) {
+  .hide-on-med-and-down {
+      display: none !important;
+  }
+  .hide-on-screen-and-med{
+      display: inline;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .hide-on-screen-and-med{
+    display: none;
+  }
+}
+
+@media (max-width: 600px){    
+    /* Imagen LOGO */
+    #logo-container img{
+        width: 154px;
+    }
+}
+
+@media (max-width: 400px){    
+    /* Imagen LOGO */
+    #logo-container img{
+        width: 154px;
+    }
+}
+/* ******************************** */
