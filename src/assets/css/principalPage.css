@@ -1,6 +1,13 @@
 html, body {
   height: 100%;
 }
+body {
+  background-image: url('../images/escudo2_10pOpacy.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 100% 100%;
+  background-size: 30%;
+}
 
 #wrap {
   min-height: 100%;
@@ -23,6 +30,7 @@ html, body {
 #logo-container img{
     width: 175px;
 }
+
 /* color de texto de opciones en nav */
 nav ul li a{
   color: black;
@@ -40,8 +48,26 @@ nav a {
     background-size: 280px;
 }
 
+.hide-on-screen-and-med{
+  display: none;
+}
+
 /* ******************************** */
 /* MEDIA */
+@media only screen and (max-width: 1350px) {
+  .hide-on-med-and-down {
+      display: none !important;
+  }
+  .hide-on-screen-and-med{
+      display: inline;
+  }
+}
+@media only screen and (max-width: 992px) {
+  .hide-on-screen-and-med{
+    display: none;
+  }
+}
+
 @media (max-width: 600px){    
     /* Imagen LOGO */
     #logo-container img{
