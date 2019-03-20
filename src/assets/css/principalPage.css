@@ -1,0 +1,51 @@
+html, body {
+  height: 100%;
+}
+
+#wrap {
+  min-height: 100%;
+}
+
+#main {
+  overflow:auto;
+  padding-bottom:100px; /* this needs to be bigger than footer height*/
+}
+
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+}
+
+/* Imagen LOGO */
+#logo-container img{
+    width: 175px;
+}
+/* color de texto de opciones en nav */
+nav ul li a{
+  color: black;
+} 
+/* color del boton de menu en nav */
+nav a {
+    color: black;
+}
+/* imagen de fondo del menu nav */
+#slide-out{
+    background-image: url('../images/escudo2_10pOpacy.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: -50px calc(100% + 20px);
+    background-size: 280px;
+}
+
+/* ******************************** */
+/* MEDIA */
+@media (max-width: 600px){    
+    /* Imagen LOGO */
+    #logo-container img{
+        width: 154px;
+    }
+}
+/* ******************************** */

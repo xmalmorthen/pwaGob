@@ -1,21 +1,64 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<div id="wrap">
+    <div id="main" class="clear-top">
+        <nav class="grey lighten-2" role="navigation">
+            <div class="nav-wrapper container">
+                <a id="logo-container" href="/" class="brand-logo"><img src="assets/images/logo.png" alt="Gobierno del Estado de Colima"></a>
+                <ul class="right hide-on-med-and-down">
+                    <li>    
+                        <div class="center row">
+                            <div class="col s12 " >
+                                <div class="row" id="topbarsearch">
+                                    <div class="input-field col s6 s12 red-text">
+                                        <i class="black-text material-icons prefix">search</i>
+                                        <input type="text" placeholder="Buscar" id="buscar" class="autocomplete black-text" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>          
+                    </li>  
+                    <li><a [routerLink]="[ '/principal' ]"><i class="material-icons">home</i></a></li>
+                    <li><a [routerLink]="[ '/tramitesyServicios' ]"><i class="material-icons left">room_service</i>Trámites y Servicios</a></li>
+                    <li><a [routerLink]="[ '/ubicanos' ]"><i class="material-icons left">location_on</i>Ubicanos</a></li>
+                    <li><a [routerLink]="[ '/contacto' ]"><i class="material-icons left">question_answer</i>Contáctanos</a></li>
+                </ul>
 
-<router-outlet></router-outlet>
+                <ul id="slide-out" class="sidenav">
+                    <li><div class="user-view"><img src="assets/images/escudo.png" alt="Gobierno del Estado de Colima"></div></li>        
+                    <li><a [routerLink]="[ '/principal' ]" class="sidenav-close"><i class="material-icons left">home</i>Inicio</a></li>
+                    <li><div class="divider"></div></li>
+                    <li><a [routerLink]="[ '/tramitesyServicios' ]" class="sidenav-close"><i class="material-icons left">room_service</i>Trámites y Servicios</a></li>
+                    <li><a [routerLink]="[ '/ubicanos' ]" class="sidenav-close"><i class="material-icons left">location_on</i>Ubicanos</a></li>
+                    <li><a [routerLink]="[ '/contacto' ]" class="sidenav-close"><i class="material-icons left">question_answer</i>Contáctanos</a></li>
+                    <li><div class="divider"></div></li>
+                    <li>
+                        <div class='user-view'>
+                            <div class="row">
+                                <div class="row">                        
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix">search</i>
+                                        <input id="buscarMobil" type="text" class="validate">
+                                        <label for="buscarMobil">Buscar</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            </div>
+        </nav>
+        <div class="container">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+<footer class="page-footer grey lighten-2 black-text footer">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5>Footer</h5>
+            </div>
+        </div>
+        Made by <a class="red-text" href="http://materializecss.com">Materialize</a>
+    </div>
+</footer>
