@@ -1,33 +1,74 @@
-<div class="mb-5">
-  <agm-map
-    [(latitude)]="location.lat"
-    [(longitude)]="location.lng"
-    [(zoom)]="location.zoom"
-    [disableDefaultUI]="true"
-    [fullscreenControl]="true"
-    [streetViewControl]="false"
-    [mapTypeControl]="true"
-    [zoomControl]="false"
-    (mapClick)="close_window($event)">
-    <agm-marker 
-        *ngFor="let marker of this.location.markers; let i = index"        
+<table id="kioscosTable" class="highlight table">
+  <thead>
+    <tr>
+      <th><h4><i class="small material-icons">location_on</i> Ubícanos</h4></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr #kioscoRow *ngFor="let marker of this.location.markers; let i = index">
+      <td (click)="tableItemSelect($event,i)" style='cursor: pointer;'>
+        <i class="material-icons">location_on</i> <strong>{{marker.info.nombre}}</strong>
+      </td>
+    </tr>
+  </tbody>
+</table>
+  <span class="left" id="total_reg"></span>
+  <ul class="pagination pager" id="myPager"></ul>
+
+<div id='infoSection' class="row my-5">    
+  <div [ngClass]="{'col s12 m12 l12': selectedmarker == null,
+                    'col s12 m6 l6': selectedmarker != null}">
+    <agm-map
+      [(latitude)]="location.lat"
+      [(longitude)]="location.lng"
+      [(zoom)]="location.zoom"
+      [disableDefaultUI]="true"
+      [fullscreenControl]="true"
+      [streetViewControl]="false"
+      [mapTypeControl]="true"
+      [zoomControl]="false"
+      (mapClick)="close_window($event)"
+    >
+      <agm-marker
+        *ngFor="let marker of this.location.markers; let i = index"
         [latitude]="marker.lat"
         [longitude]="marker.lng"
         [label]="marker.label"
         [markerDraggable]="marker.draggable"
-        (markerClick)=select_marker(marker)>
-        
-      <agm-info-window [isOpen]="marker.isOpen" #infoWindow>
-          <div>{{marker.label}}</div>
-          <div>
-            {{marker.info.info}}
+        (markerClick)="select_marker(marker)">
+        <agm-info-window [isOpen]="marker.isOpen" #infoWindow>
+          <h6><i class="material-icons">location_city</i> {{ marker.info.nombre }}</h6>
+          <div class="divider"></div>
+          <div class='mt-1'>
+            Abierto de {{ marker.info.horario }}
           </div>
-        <strong></strong>
-      </agm-info-window>
-      
-    </agm-marker>
-  </agm-map>  
-
-  <button (click)='btnClick($event)'>name</button>
-  
+        </agm-info-window>
+      </agm-marker>
+    </agm-map>
+  </div>
+  <div *ngIf="selectedmarker != null" class="col s12 m6 l6 mt-2">
+    <h5>
+      <i class="material-icons">location_city</i>
+      <span class='infoHeader'>
+        <strong>{{selectedmarker.info.nombre}}</strong>
+      </span>
+    </h5>
+    <div class="divider my-2"></div>
+    <div class="row">
+      <div class="col s12"><strong>{{selectedmarker.info.direccion}}</strong></div>
+      <div class="col s6">{{selectedmarker.info.localidad}}</div>
+      <div class="col s6">Abierto de <strong>{{selectedmarker.info.horario}}</strong></div>
+    </div>
+    <div class="section">
+      <h6>Trámites que puede realizar</h6>
+      <blockquote>
+        <ul>
+          <li>Trámite 1</li>
+          <li>Trámite 2</li>
+          <li>Trámite 3</li>
+        </ul>        
+      </blockquote>
+    </div>
+  </div>
 </div>
+

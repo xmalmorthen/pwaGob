@@ -1,5 +1,5 @@
 (function($) {
   $(function() {
-    $("select").formSelect();
+    $(".input-field select").formSelect();
   });
 })(jQuery);
