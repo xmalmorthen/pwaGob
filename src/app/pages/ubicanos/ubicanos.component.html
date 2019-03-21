@@ -1,3 +1,33 @@
-<p>
-  ubicanos works!
-</p>
+<div class="mb-5">
+  <agm-map
+    [(latitude)]="location.lat"
+    [(longitude)]="location.lng"
+    [(zoom)]="location.zoom"
+    [disableDefaultUI]="true"
+    [fullscreenControl]="true"
+    [streetViewControl]="false"
+    [mapTypeControl]="true"
+    [zoomControl]="false"
+    (mapClick)="close_window($event)">
+    <agm-marker 
+        *ngFor="let marker of this.location.markers; let i = index"        
+        [latitude]="marker.lat"
+        [longitude]="marker.lng"
+        [label]="marker.label"
+        [markerDraggable]="marker.draggable"
+        (markerClick)=select_marker(infoWindow)>
+        
+      <agm-info-window [isOpen]="marker.isOpen" #infoWindow>
+          <div>{{marker.label}}</div>
+          <div>
+            {{marker.info.info}}
+          </div>
+        <strong></strong>
+      </agm-info-window>
+      
+    </agm-marker>
+  </agm-map>  
+
+  <button (click)='btnClick($event)'>name</button>
+  
+</div>
