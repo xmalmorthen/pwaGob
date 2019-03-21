@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, NgZone, OnInit, AfterViewInit, QueryList, ViewChildren } from "@angular/core";
+import { Component, Input, ViewChild, NgZone, OnInit } from "@angular/core";
 import { MapsAPILoader, AgmMap } from "@agm/core";
 import { GoogleMapsAPIWrapper } from "@agm/core/services";
 import { WsKioscosService } from "src/app/services/ws-kioscos.service";
@@ -44,10 +44,9 @@ interface Location {
   templateUrl: './ubicanos.component.html',
   styleUrls: ['./ubicanos.component.css']
 })
-export class UbicanosComponent implements AfterViewInit  {
+export class UbicanosComponent implements OnInit {
   geocoder: any;
   @ViewChild(AgmMap) map: AgmMap;
-  @ViewChildren('kioscoRow') kioscoRow: QueryList<Marker>;
 
   public location: Location = {
     lat: 19.2433,
@@ -101,20 +100,7 @@ export class UbicanosComponent implements AfterViewInit  {
       });
   }
 
-  ngAfterViewInit() {
-    this.kioscoRow.changes.subscribe(t => {
-      debugger;
-      $('#kioscosTable').pageMe({
-        pagerSelector: '#myPager',
-        activeColor: 'blue',
-        prevText: 'Anterior',
-        nextText: 'Siguiente',
-        showPrevNext: true,
-        hidePageNumbers: false,
-        perPage: 10
-      });
-    });
-  }
+  ngOnInit() {}
 
   close_window(): void {
     this.location.markers.forEach(marker => {

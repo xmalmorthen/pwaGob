@@ -32,7 +32,7 @@ import { environment } from '../environments/environment';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     FormsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDxWmnsWgwatmiF98NOAEbaVHVP_9PPdOc'
+      apiKey: ''
     }),
     AgmSnazzyInfoWindowModule,
     SweetAlert2Module.forRoot()
