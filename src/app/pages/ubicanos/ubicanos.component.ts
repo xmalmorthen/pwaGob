@@ -39,9 +39,7 @@ interface Location {
 export class UbicanosComponent implements OnInit {
   geocoder: any;
   //@ViewChild(AgmMap) map: AgmMap;
-  infoWindowOpened = null;
-  previous_info_window = null;
-
+  
   public location: Location = {
     lat: 19.2433,
     lng: -103.725,
@@ -95,23 +93,18 @@ export class UbicanosComponent implements OnInit {
   ngOnInit() {}
 
   close_window() : void {
-    if (this.previous_info_window != null) {
-      this.previous_info_window.close();
-    }
+    this.location.markers.forEach(marker => {
+      marker.isOpen = false;
+    });
   }
 
-  select_marker(infoWindow) : void {
-    if (this.previous_info_window == null)
-      this.previous_info_window = infoWindow;
-    else {
-      this.infoWindowOpened = infoWindow;
-      this.previous_info_window.close();
-    }
-    this.previous_info_window = infoWindow;
+  select_marker(marker) : void {
+    this.close_window();
+    marker.isOpen = true;    
   }
 
   public btnClick(event: Event) : void{
-    this.location.markers[2].isOpen = true;
+    this.select_marker(this.location.markers[2]);
     this.location.lat = this.location.markers[2].lat;
     this.location.lng = this.location.markers[2].lng;
   }

@@ -15,7 +15,7 @@
         [longitude]="marker.lng"
         [label]="marker.label"
         [markerDraggable]="marker.draggable"
-        (markerClick)=select_marker(infoWindow)>
+        (markerClick)=select_marker(marker)>
         
       <agm-info-window [isOpen]="marker.isOpen" #infoWindow>
           <div>{{marker.label}}</div>
