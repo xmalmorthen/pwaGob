@@ -4,8 +4,10 @@ import { GoogleMapsAPIWrapper } from "@agm/core/services";
 import { WsKioscosService } from "src/app/services/ws-kioscos.service";
 import Swal from "sweetalert2";
 import { KioscoInterface } from "src/app/interfaces/kioscos.interface";
+import { GeoLicationService } from 'src/app/services/geo-lication.service';
 
-declare var $: any;
+declare const $: any;
+declare const M: any;
 declare var google: any;
 
 interface MarkerInfo {
@@ -27,15 +29,12 @@ interface Marker {
 }
 
 interface Location {
-  lat: number;
-  lng: number;
+  mapLat?: number;
+  mapLng?: number;
+  posLat?: number;
+  posLng?: number;
   viewport?: object;
-  zoom: number;
-  address_level_1?: string;
-  address_level_2?: string;
-  address_country?: string;
-  address_zip?: string;
-  address_state?: string;
+  zoom?: number;
   markers?: Marker[];
 }
 
@@ -48,32 +47,32 @@ export class UbicanosComponent implements OnInit {
   geocoder: any;
   @ViewChild(AgmMap) map: AgmMap;
 
-  public location: Location = {
-    lat: 19.2433,
-    lng: -103.725,
-    markers: [],
-    zoom: 10
-  };
+  public location: Location = {};
 
   public selectedmarker: Marker = null;
+  public dropdownKioscosAnchor = null;
 
   constructor(
     public mapsApiLoader: MapsAPILoader,
     private zone: NgZone,
     private wrapper: GoogleMapsAPIWrapper,
-    private wsKioscosService: WsKioscosService
+    private wsKioscosService: WsKioscosService,
+    private geoLocation: GeoLicationService
   ) {
     this.mapsApiLoader = mapsApiLoader;
     this.zone = zone;
     this.wrapper = wrapper;
+
+    this.location = {
+      markers : [],
+      zoom: 10
+    };
 
     Promise.race([
       this.wsKioscosService.getKioscosFromWs(),
       this.wsKioscosService.getKioscosFromJson()
     ])
       .then((kioscos: KioscoInterface[]) => {
-        console.log(kioscos);
-
         this.mapsApiLoader.load().then(() => {
           kioscos.forEach((kiosco: KioscoInterface) => {
             this.location.markers.push(
@@ -100,7 +99,26 @@ export class UbicanosComponent implements OnInit {
       });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    document.addEventListener('DOMContentLoaded', () => {
+      this.dropdownKioscosAnchor = M.Dropdown.init(document.querySelectorAll('.dropdownKioscosAnchor'), { constrainWidth : false });
+    });
+
+    this.geoLocation.getCurrentPosition()
+      .then( (pos: any) => {
+        this.location.mapLat = pos.coords.latitude;
+        this.location.mapLng = pos.coords.longitude;
+        this.location.posLat = pos.coords.latitude;
+        this.location.posLng = pos.coords.longitude;
+
+        M.toast({html: 'Geolocalización realizada'});
+      })
+      .catch ( (err) => {
+        this.location.mapLat = 19.2433;
+        this.location.mapLng = -103.725;
+        M.toast({html: `Sin geolocalización [ ${err} ]`});
+      });
+  }
 
   close_window(): void {
     this.location.markers.forEach(marker => {
@@ -118,8 +136,10 @@ export class UbicanosComponent implements OnInit {
   }
 
   public tableItemSelect(event: Event, id: number): void {
+    event.stopPropagation();
+
     this.select_marker(this.location.markers[id]);
-    this.location.lat = this.location.markers[id].lat;
-    this.location.lng = this.location.markers[id].lng;
+    this.location.mapLat = this.location.markers[id].lat;
+    this.location.mapLng = this.location.markers[id].lng;
   }
 }
