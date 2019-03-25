@@ -3,40 +3,17 @@ import { MapsAPILoader, AgmMap } from "@agm/core";
 import { GoogleMapsAPIWrapper } from "@agm/core/services";
 import { WsKioscosService } from "src/app/services/ws-kioscos.service";
 import Swal from "sweetalert2";
+
+// INTERFACES
 import { KioscoInterface } from "src/app/interfaces/kioscos.interface";
+import { Location, Marker, MarkerInfo } from "src/app/interfaces/map.interface";
+
+// SERVICES
 import { GeoLicationService } from 'src/app/services/geo-lication.service';
 
 declare const $: any;
 declare const M: any;
 declare var google: any;
-
-interface MarkerInfo {
-  img?: string;
-  nombre?: string;
-  localidad?: string;
-  horario?: string;
-  direccion?: string;
-  id?: number;
-}
-
-interface Marker {
-  lat: number;
-  lng: number;
-  label?: string;
-  draggable: boolean;
-  isOpen?: boolean;
-  info: MarkerInfo;
-}
-
-interface Location {
-  mapLat?: number;
-  mapLng?: number;
-  posLat?: number;
-  posLng?: number;
-  viewport?: object;
-  zoom?: number;
-  markers?: Marker[];
-}
 
 @Component({
   selector: 'app-ubicanos',
@@ -132,7 +109,7 @@ export class UbicanosComponent implements OnInit {
     marker.isOpen = true;
     this.selectedmarker = marker;
 
-    document.querySelector('#infoSection').scrollIntoView();
+    // document.querySelector('#infoSection').scrollIntoView();
   }
 
   public tableItemSelect(event: Event, id: number): void {

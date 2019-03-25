@@ -39,7 +39,6 @@ export class WsKioscosService {
                     resolve( this.kioscosList );
                   },
                   (error: HttpErrorResponse) => {
-                    console.log(error);
                     reject(error);
                   }
                 );

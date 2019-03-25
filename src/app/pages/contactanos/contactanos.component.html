@@ -1,3 +1,42 @@
-<p>
-  contactanos works!
-</p>
+<h3><i class="medium material-icons left">info_outline</i>Contáctanos</h3>
+<div class="divider"></div>
+<form class="col s12">
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="nombre" type="text" class="validate" />
+      <label for="nombre">Nombre</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s6">
+      <input id="tel" type="tel" class="validate" />
+      <label for="tel">Teléfono</label>
+    </div>
+    <div class="input-field col s6">
+      <input id="email" type="email" class="validate" />
+      <label for="email">Correo electrónico</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <select id="tema">
+        <option value="" disabled selected>Seleccionar tema</option>
+        <option value="1">Comentario</option>
+        <option value="2">Sugerencia</option>
+        <option value="3">Petición</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <textarea id="requerimiento" class="materialize-textarea"></textarea>
+      <label for="textarea1">¿Cuál es su requerimiento?</label>
+    </div>
+  </div>
+
+  <div class='right-align'>
+    <button class="btn" type="submit" name="action">
+      Enviar <i class="material-icons right">send</i>
+    </button>
+  </div>
+</form>
