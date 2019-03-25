@@ -1,4 +1,4 @@
-<a class='dropdownKioscosAnchor btn' href='#' data-target='dropdownKioscosList'><i class="material-icons left">format_list_bulleted</i> Lista de Kioscos</a>
+<a class='dropdownKioscosAnchor btn' data-target='dropdownKioscosList'><i class="material-icons left">format_list_bulleted</i> Lista de Kioscos</a>
 <ul id='dropdownKioscosList' class='dropdown-content'>
   <li #kioscoRow *ngFor="let marker of this.location.markers; let i = index">
     <a (click)='tableItemSelect($event,i)' ><i class="material-icons">location_on</i> <strong>{{marker.info.nombre}}</strong></a>
@@ -8,6 +8,8 @@
 <div id='infoSection' class="row mt-2 mb-1">    
   <div class='pl-0 pr-0' [ngClass]="{'col s12 m12 l12': selectedmarker == null,
                     'col s12 m6 l6': selectedmarker != null}">
+    
+
     <agm-map
       [(latitude)]="location.mapLat"
       [(longitude)]="location.mapLng"
@@ -17,8 +19,7 @@
       [streetViewControl]="false"
       [mapTypeControl]="true"
       [zoomControl]="false"
-      (mapClick)="close_window($event)"
-    >
+      (mapClick)="close_window($event)">
       <agm-marker
         *ngFor="let marker of this.location.markers; let i = index"
         [latitude]="marker.lat"
@@ -39,10 +40,14 @@
           <div class='mt-1'>
             Abierto de {{ marker.info.horario }}
           </div>
+          <br>
+          <div *ngIf="marker.info.distance" class='mt-1'>
+            Se encuentra a <strong>{{marker.info.distance}}</strong> de distancia, <strong>{{marker.info.time}}</strong> aproximado de viaje.
+          </div>
         </agm-info-window>
       </agm-marker>
 
-      <agm-marker *ngIf="location.posLat"        
+      <agm-marker *ngIf="location.geoUbication === true"        
         [latitude]="location.posLat"
         [longitude]="location.posLng"
         [iconUrl]= "{
@@ -55,7 +60,28 @@
         [markerDraggable]= false>
       </agm-marker>
 
+      <agm-direction 
+        *ngIf="location.geoUbication === true && route" 
+        [renderOptions]='{
+          suppressMarkers: true
+        }'
+        [provideRouteAlternatives] = "false"
+        [travelMode]= "route.travelMode"
+        [origin]="route.origin" 
+        [destination]="route.destination"
+        
+        (onResponse)="onResponseRoute($event)"
+        >
+      </agm-direction>
+
     </agm-map>
+
+    <div class='travelStyle'>
+      <a (click)="changeTravelMode(0)" class='btn mr-1'><i class="material-icons">motorcycle</i></a>
+      <a (click)="changeTravelMode(1)" class='btn mx-1'><i class="material-icons">directions_car</i></a>
+      <a (click)="changeTravelMode(2)" class='btn ml-1'><i class="material-icons">directions_walk</i></a>
+    </div>
+    
   </div>
   <div *ngIf="selectedmarker != null" class="col s12 m6 l6 mt-2">
     <h5>
@@ -67,6 +93,14 @@
       <div class="col s12"><strong>{{selectedmarker.info.direccion}}</strong></div>
       <div class="col s6">{{selectedmarker.info.localidad}}</div>
       <div class="col s6">Abierto de <strong>{{selectedmarker.info.horario}}</strong></div>
+      <div *ngIf="selectedmarker.info.distance" class='col s12 pt-2'>
+        <span [ngSwitch]="this.route.travelMode" class='mr-2'>
+          <i *ngSwitchCase="'BICYCLING'" class="medium material-icons">motorcycle</i>
+          <i *ngSwitchCase="'DRIVING'" class="medium material-icons">directions_car</i>
+          <i *ngSwitchCase="'WALKING'" class="medium material-icons">directions_walk</i>
+        </span>
+        Se encuentra a <strong class='text1_5em'>{{selectedmarker.info.distance}}</strong> de distancia, <strong class='text1_5em'>{{selectedmarker.info.time}}.</strong> aproximado de viaje.
+      </div>
     </div>
     <div class="section">
       <h6>Trámites que puede realizar</h6>
