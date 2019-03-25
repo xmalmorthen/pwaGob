@@ -1,15 +1,19 @@
-import { Component, Input, ViewChild, NgZone, OnInit } from "@angular/core";
-import { MapsAPILoader, AgmMap } from "@agm/core";
-import { GoogleMapsAPIWrapper } from "@agm/core/services";
-import { WsKioscosService } from "src/app/services/ws-kioscos.service";
-import Swal from "sweetalert2";
+import { Component, Input, ViewChild, NgZone, OnInit } from '@angular/core';
+import { MapsAPILoader, AgmMap } from '@agm/core';
+import { GoogleMapsAPIWrapper } from '@agm/core/services';
+import Swal from 'sweetalert2';
 
-// INTERFACES
-import { KioscoInterface } from "src/app/interfaces/kioscos.interface";
-import { Location, Marker, MarkerInfo } from "src/app/interfaces/map.interface";
+//ENUMERATORS
+import { TRAVELMODE } from 'src/app/enumerators/TRAVELMODE';
 
-// SERVICES
+//SERVICES
 import { GeoLicationService } from 'src/app/services/geo-lication.service';
+import { WsKioscosService } from 'src/app/services/ws-kioscos.service';
+
+//INTERFACES
+import { KioscoInterface } from 'src/app/interfaces/kioscos.interface';
+import { RootObjectInterface } from 'src/app/interfaces/GeocoderResponse.interface';
+import { RouteKioscosInterface, LocationInterface, MarkerInterface } from 'src/app/interfaces/map.interface';
 
 declare const $: any;
 declare const M: any;
@@ -24,10 +28,12 @@ export class UbicanosComponent implements OnInit {
   geocoder: any;
   @ViewChild(AgmMap) map: AgmMap;
 
-  public location: Location = {};
+  public location: LocationInterface = {};
 
-  public selectedmarker: Marker = null;
+  public selectedmarker: MarkerInterface = null;
   public dropdownKioscosAnchor = null;
+
+  public route: RouteKioscosInterface = null;
 
   constructor(
     public mapsApiLoader: MapsAPILoader,
@@ -41,9 +47,32 @@ export class UbicanosComponent implements OnInit {
     this.wrapper = wrapper;
 
     this.location = {
+      geoUbication : false,
       markers : [],
       zoom: 10
     };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      this.dropdownKioscosAnchor = M.Dropdown.init(document.querySelectorAll('.dropdownKioscosAnchor'), { constrainWidth : false });
+    });
+
+    this.geoLocation.getCurrentPosition()
+      .then( (pos: any) => {
+        this.location.mapLat = pos.coords.latitude;
+        this.location.mapLng = pos.coords.longitude;
+        this.location.posLat = pos.coords.latitude;
+        this.location.posLng = pos.coords.longitude;
+        this.location.geoUbication = true;
+
+        M.toast({html: 'Geolocalización realizada'});
+      })
+      .catch ( (err) => {
+        this.location.mapLat = 19.2433;
+        this.location.mapLng = -103.725;
+        this.location.geoUbication = false;
+
+        M.toast({html: `Sin geolocalización [ ${err} ]`});
+      });
 
     Promise.race([
       this.wsKioscosService.getKioscosFromWs(),
@@ -77,24 +106,6 @@ export class UbicanosComponent implements OnInit {
   }
 
   ngOnInit() {
-    document.addEventListener('DOMContentLoaded', () => {
-      this.dropdownKioscosAnchor = M.Dropdown.init(document.querySelectorAll('.dropdownKioscosAnchor'), { constrainWidth : false });
-    });
-
-    this.geoLocation.getCurrentPosition()
-      .then( (pos: any) => {
-        this.location.mapLat = pos.coords.latitude;
-        this.location.mapLng = pos.coords.longitude;
-        this.location.posLat = pos.coords.latitude;
-        this.location.posLng = pos.coords.longitude;
-
-        M.toast({html: 'Geolocalización realizada'});
-      })
-      .catch ( (err) => {
-        this.location.mapLat = 19.2433;
-        this.location.mapLng = -103.725;
-        M.toast({html: `Sin geolocalización [ ${err} ]`});
-      });
   }
 
   close_window(): void {
@@ -102,12 +113,27 @@ export class UbicanosComponent implements OnInit {
       marker.isOpen = false;
     });
     this.selectedmarker = null;
+    this.route = null;
   }
 
-  select_marker(marker): void {
+  select_marker(marker: MarkerInterface): void {
     this.close_window();
     marker.isOpen = true;
     this.selectedmarker = marker;
+
+    const currentTravelMode = this.route ? this.route.travelMode : TRAVELMODE.DRIVING;
+
+    this.route = {
+      origin: {
+        lat: this.location.posLat,
+        lng: this.location.posLng
+      },
+      destination: {
+        lat: this.selectedmarker.lat,
+        lng: this.selectedmarker.lng
+      },
+      travelMode : currentTravelMode
+    };
 
     // document.querySelector('#infoSection').scrollIntoView();
   }
@@ -119,4 +145,30 @@ export class UbicanosComponent implements OnInit {
     this.location.mapLat = this.location.markers[id].lat;
     this.location.mapLng = this.location.markers[id].lng;
   }
+
+  public changeTravelMode(mode: number): void {
+    switch (mode) {
+      case 0:
+        this.route.travelMode = TRAVELMODE.BICYCLING;
+        break;
+      case 1:
+        this.route.travelMode = TRAVELMODE.DRIVING;
+        break;
+      case 2:
+        this.route.travelMode = TRAVELMODE.WALKING;
+        break;
+    }
+  }
+
+  public onResponseRoute(event: RootObjectInterface): void {
+    this.route.response = event;
+
+    if (this.route.response.status === 'OK') {
+      this.selectedmarker.info.distance = this.route.response.routes[0].legs[0].distance.text;
+      this.selectedmarker.info.time = this.route.response.routes[0].legs[0].duration.text;
+    }
+
+    //console.log(this.route.response);
+  }
+
 }

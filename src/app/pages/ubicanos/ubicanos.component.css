@@ -1,4 +1,14 @@
 agm-map {
-    height: 300px;
+    height: 400px;
     width: 100%;
+}
+
+.travelStyle {
+    position: relative;
+    float: right;
+    margin-top: -43px;
+}
+
+.text1_5em{
+    font-size: 1.5em;
 }

@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { FormsModule } from '@angular/forms';
 import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
+import { AgmDirectionModule } from 'agm-direction'
 import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 
@@ -32,8 +33,9 @@ import { environment } from '../environments/environment';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     FormsModule,
     AgmCoreModule.forRoot({
-      apiKey: ''
+      apiKey: 'AIzaSyDxWmnsWgwatmiF98NOAEbaVHVP_9PPdOc'
     }),
+    AgmDirectionModule,
     AgmSnazzyInfoWindowModule,
     SweetAlert2Module.forRoot()
   ],
