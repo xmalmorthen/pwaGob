@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, NgZone, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, NgZone, OnInit, AfterViewInit } from '@angular/core';
 import { MapsAPILoader, AgmMap } from '@agm/core';
 import { GoogleMapsAPIWrapper } from '@agm/core/services';
 import Swal from 'sweetalert2';
@@ -51,10 +51,6 @@ export class UbicanosComponent implements OnInit {
       zoom: 10
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
-      this.dropdownKioscosAnchor = M.Dropdown.init(document.querySelectorAll('.dropdownKioscosAnchor'), { constrainWidth : false });
-    });
-
     this.geoLocation.getCurrentPosition()
       .then( (pos: any) => {
         this.location.mapLat = pos.coords.latitude;
@@ -105,6 +101,7 @@ export class UbicanosComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dropdownKioscosAnchor = M.Dropdown.init(document.querySelectorAll('.dropdownKioscosAnchor'), { constrainWidth : false });
   }
 
   close_window(): void {

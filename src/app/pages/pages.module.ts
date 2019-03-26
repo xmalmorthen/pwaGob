@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 
-//IMPORTS
+// IMPORTS
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
+
+// SUB MODULES
+import { SharedModule } from '../shared/shared.module';
 
 //PAGES
 import { PrincipalComponent } from './principal/principal.component';
@@ -26,14 +29,15 @@ import { UbicanosComponent } from './ubicanos/ubicanos.component';
     ContactanosComponent,
     UbicanosComponent
   ],
-  imports :[
+  imports : [
     CommonModule,
-    HttpClientModule,    
+    HttpClientModule,
     FormsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDxWmnsWgwatmiF98NOAEbaVHVP_9PPdOc'
     }),
-    AgmDirectionModule
+    AgmDirectionModule,
+    SharedModule
   ],
   providers: [
     GoogleMapsAPIWrapper

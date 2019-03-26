@@ -1,0 +1,20 @@
+<h5><i class="left material-icons">list</i>Categoría de Trámites</h5>
+<br>
+<ul id='categoriaListDOM' class="collapsible">
+  <li *ngFor="let categoria of this.categoriasList; let i = index" [attr.idCat]="categoria.id" >
+    <div class="collapsible-header">
+      <i class="material-icons">filter_drama</i>{{ categoria.descripcion }}
+    </div>
+    <div class="collapsible-body">
+      <ul class="collection" *ngIf="tramiteCategoriasSelected" >
+        <li class="collection-item avatar" *ngFor="let tramite of this.tramiteCategoriasSelected.tramites; let i = index">
+          <img src="images/yuna.jpg" alt="" class="circle">
+          <span class="title">{{ tramite.nombre }}</span>
+          <p [innerHTML]="tramite.descripcion"></p>
+          <a href="{{tramite.url_tramite}}" class="secondary-content"><i class="material-icons">grade</i></a>
+        </li>        
+      </ul>
+      <span *ngIf="!tramiteCategoriasSelected">No se pudo obtener la información...!!!</span>
+    </div>
+  </li>  
+</ul>

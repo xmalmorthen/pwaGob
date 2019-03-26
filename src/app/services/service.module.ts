@@ -1,18 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import {  
+import {
   GeoLicationService,
-  WsKioscosService
+  WsKioscosService,
+  TramitesService
 } from "./service.index";
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  providers :[
+  providers : [
     GeoLicationService,
-    WsKioscosService
+    WsKioscosService,
+    TramitesService
   ],
   declarations: []
 })
