@@ -7,8 +7,7 @@ import Swal from 'sweetalert2';
 import { TRAVELMODE } from 'src/app/enumerators/TRAVELMODE';
 
 //SERVICES
-import { GeoLicationService } from 'src/app/services/geo-lication.service';
-import { WsKioscosService } from 'src/app/services/ws-kioscos.service';
+import { GeoLicationService, WsKioscosService } from 'src/app/services/service.index';
 
 //INTERFACES
 import { KioscoInterface } from 'src/app/interfaces/kioscos.interface';

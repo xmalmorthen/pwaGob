@@ -6,15 +6,16 @@ import { ContactanosComponent } from './pages/contactanos/contactanos.component'
 import { UbicanosComponent } from './pages/ubicanos/ubicanos.component';
 
 const routes: Routes = [
-  { path: '', component: PrincipalComponent },
+  { path: 'principal', component: PrincipalComponent },
   { path: 'tramitesyServicios', component: TramitesServiciosComponent },
   { path: 'contacto', component: ContactanosComponent },
   { path: 'ubicanos', component: UbicanosComponent },
+  { path: '', redirectTo: '/principal', pathMatch: 'full' },
   { path: '**', component: PrincipalComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
