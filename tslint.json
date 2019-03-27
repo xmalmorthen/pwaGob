@@ -75,6 +75,8 @@
     "ignore-comments": true,
     "ignore-blank-lines": true,
     "ignore-empty-lines": true,
-    "class-name": false
+    "class-name": false,
+    "no-input-rename": false,
+    "no-inferrable-types": false
   }
 }

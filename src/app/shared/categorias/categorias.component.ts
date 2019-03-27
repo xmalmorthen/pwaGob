@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -21,6 +21,10 @@ declare const M: any;
   styleUrls: ['./categorias.component.css']
 })
 export class CategoriasComponent implements OnInit {
+
+  @Input('categoria') categoriaSection: boolean = true;
+  @Input('dependencia') dependenciasSection: boolean = true;
+  @Input('busqueda') busquedaSection: boolean = true;
 
   public categoriasConTramites: categoriasConTramitesInterface[] = [];
   public dependenciasConTramites: dependenciasConTramitesInterface[] = [];
