@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TramitesService } from 'src/app/services/service.index';
+import { RegistroInterface } from 'src/app/interfaces/WSBuscarTramite.interface';
 
 @Component({
   selector: 'app-principal',

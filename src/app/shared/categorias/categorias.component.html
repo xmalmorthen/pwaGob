@@ -1,45 +1,80 @@
-<h5><i class="left material-icons">list</i>Categoría de Trámites</h5>
-<br>
-<ul id='categoriaListDOM' class="collapsible">
-  <li *ngFor="let categoria of this.categoriasList; let i = index" [attr.idCat]="categoria.id" >
-    <div class="collapsible-header">
-      <i class="material-icons">library_books</i>{{ categoria.descripcion }}
-    </div>
-    <div class="collapsible-body">
-      <ul class="collection" *ngIf="tramiteCategoriasSelected" >
-        <li class="collection-item" *ngFor="let tramite of this.tramiteCategoriasSelected.tramites; let i = index" [attr.idTramite]="tramite.id_tramite">
+<h5><i class="left material-icons">list</i>Trámites en Línea</h5>
 
-          <div class='row'>
-            <div class="col s1">
-              <i class="medium material-icons">web_asset</i>
-            </div>
-            <div class="col s11">
-              <h5 *ngIf="tramite.nombre;else sinNombre" class='show-on-large hide-on-med-and-down'>{{tramite.nombre}}</h5>
-              <h6 *ngIf="tramite.nombre;else sinNombre" class='show-on-medium-and-down hide-on-large-only'>{{tramite.nombre}}</h6>
-              <ng-template #sinNombre>
-                <h5 class='show-on-large hide-on-med-and-down'>Nombre no registrado</h5>
-                <h6 class='show-on-medium-and-down hide-on-large-only'>Nombre no registrado</h6>
-              </ng-template>
-            </div>
-          </div>
-        
-          <blockquote class="ml-3 mr-2 show-on-large hide-on-med-and-down">
-            <span id='tramiteDescripcion' class='tramiteDescripcion' [innerHTML]="tramite.descripcion" *ngIf="tramite.descripcion;else elseTemplate"></span>
-            <ng-template #elseTemplate>{{tramite.nombre}}</ng-template>
-          </blockquote>
+<div class="row">
+  <div class="col s12 l3 m-2">
+    <a class='dropdownCategoriasAnchor btn' data-target='dropdownCategoriasList'><i class="material-icons left">format_list_bulleted</i> Categorias</a>
+    <ul id='dropdownCategoriasList' class='dropdown-content'>
+      <li #categoriasRow *ngFor="let categoria of categoriasConTramites; let i = index">
+        <a (click)='categoriaItemSelect($event,categoria.id)' ><i class="material-icons">library_books</i> <strong>{{ categoria.descripcion }}</strong></a>
+      </li>
+    </ul>
+  </div>
+  <div class="col s12 l3 m-2">
+    <a class='dropdownDependenciasAnchor btn' data-target='dropdownDependenciasList'><i class="material-icons left">location_city</i> Dependencias</a>
+    <ul id='dropdownDependenciasList' class='dropdown-content'>
+      <li #dependenciasRow *ngFor="let dependencia of dependenciasConTramites; let i = index">
+        <a (click)='dependenciaItemSelect($event,dependencia.id_dependencia)' ><i class="material-icons">location_city</i> <strong>{{ dependencia.nombre_dependencia }}</strong></a>
+      </li>
+    </ul>
+  </div>
+  <div class="input-field col s12 l5 m-2">
+      <i class="material-icons prefix">search</i>
+      <input id="buscarTramitePage" type="text" class="autocomplete" [(ngModel)]="palabraBuscarInput" (keyup.enter)="buscarTramite($event)">
+      <label for="buscarTramitePage">Buscar trámite</label>
+  </div>
+</div>
 
-          <div class='botonera'>
-            <a href="{{tramite.url_tramite}}" *ngIf="tramite.url_tramite" target="_blank" rel="noopener noreferrer" class='mx-1' title='Ir al trámite.'><i class="small material-icons">link</i></a>
-            <a href="{{tramite.url_video}}" *ngIf="tramite.url_video" target="_blank" rel="noopener noreferrer" class='mx-1' title='Video.'><i class="small material-icons">ondemand_video</i></a>
-            <a href="{{tramite.url_ayuda}}" *ngIf="tramite.url_ayuda" target="_blank" rel="noopener noreferrer" class='mx-1' title='Video.'><i class="small material-icons">help</i></a>
-          </div>
+<div *ngIf="loadingTramites == true" class='center-align'>
+  <i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
+  <span class="">Cargando información...</span>
+</div>
 
-        </li>        
-      </ul>
-      <div *ngIf="!tramiteCategoriasSelected" class='m-2 center-align'>
-        <i class="fa fa-cog fa-spin fa-1x fa-fw"></i>
-        <span class="">Cargando...</span>
+<div *ngIf="errorResponse == true" class='center-align'>
+  <i class="fa fa-frown-o fa-2x fa-fw"></i>
+  <span class="">Ocurrió un error al cargar la información...</span>
+</div>
+
+<div class="row">
+  <div class="col s12 m8" *ngIf="tramitesFrom == 2">
+    <h6>
+      <i class="left material-icons">search</i>Palabra buscada : <strong class='ml-2' style='font-size: 1.5em;'>{{ this.palabraBuscar }}</strong>
+    </h6>
+  </div>
+  <div class="col s12 m4" *ngIf="listaTramitesSelected.length > 0">
+      Trámites encontrados : <strong class='ml-2' style='font-size: 1.5em;'>{{ listaTramitesSelected.length }}</strong>
+  </div>
+  <div class="col s12 m4" *ngIf="listaTramitesSelected.length == 0 && tramitesFrom && !loadingTramites">
+      <strong>No se encontraron trámites</strong>
+  </div>
+</div>
+
+<ul class="collection" *ngIf="listaTramitesSelected.length > 0" >
+  <li class="collection-item" *ngFor="let tramite of listaTramitesSelected; let i = index">
+
+    <div class='row'>
+      <div class="col s1">
+        <i class="medium material-icons">web_asset</i>
+      </div>
+      <div class="col s11">
+        <h5 *ngIf="tramite.nombre;else sinNombre" class='show-on-large hide-on-med-and-down'>{{tramite.nombre}}</h5>
+        <h6 *ngIf="tramite.nombre;else sinNombre" class='show-on-medium-and-down hide-on-large-only'>{{tramite.nombre}}</h6>
+        <ng-template #sinNombre>
+          <h5 class='show-on-large hide-on-med-and-down'>Nombre no registrado</h5>
+          <h6 class='show-on-medium-and-down hide-on-large-only'>Nombre no registrado</h6>
+        </ng-template>
       </div>
     </div>
-  </li>  
+  
+    <blockquote class="ml-3 mr-2 show-on-large hide-on-med-and-down">
+      <span id='tramiteDescripcion' class='tramiteDescripcion' [innerHTML]="tramite.descripcion" *ngIf="tramite.descripcion;else elseTemplate"></span>
+      <ng-template #elseTemplate>{{tramite.nombre}}</ng-template>
+    </blockquote>
+
+    <div class='botonera'>
+      <a href="{{tramite.url_tramite}}" *ngIf="tramite.url_tramite" target="_blank" rel="noopener noreferrer" class='mx-1' title='Ir al trámite.'><i class="small material-icons">link</i></a>
+      <a href="{{tramite.url_video}}" *ngIf="tramite.url_video" target="_blank" rel="noopener noreferrer" class='mx-1' title='Video.'><i class="small material-icons">ondemand_video</i></a>
+      <a href="{{tramite.url_ayuda}}" *ngIf="tramite.url_ayuda" target="_blank" rel="noopener noreferrer" class='mx-1' title='Video.'><i class="small material-icons">help</i></a>
+    </div>
+
+  </li>        
 </ul>

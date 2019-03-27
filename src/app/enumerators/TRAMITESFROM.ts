@@ -1,0 +1,5 @@
+export enum TRAMITES_FROM {
+  CATEGORIA = 0,
+  DEPENDENCIA = 1,
+  BUSQUEDA = 2
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -6,15 +6,14 @@ import { filter } from 'rxjs/operators';
 import { TramitesService } from 'src/app/services/service.index';
 
 // INTERFACES
-import { getCategoriasInterface, getCategoriaInterface } from 'src/app/interfaces/tramites.interface';
+import { getCategoriasInterface, categoriasConTramitesInterface, getDependenciasInterface, dependenciasConTramitesInterface, tramiteInterface } from 'src/app/interfaces/tramites.interface';
+import { RegistroInterface } from 'src/app/interfaces/WSBuscarTramite.interface';
 
+// ENUMERATIONS
+import { TRAMITES_FROM } from 'src/app/enumerators/TRAMITESFROM';
 
 declare const $: any;
 declare const M: any;
-declare interface tramitesCategoriaInterface {
-  idCat: string;
-  tramites: getCategoriaInterface[];
-}
 
 @Component({
   selector: 'app-categorias',
@@ -23,94 +22,139 @@ declare interface tramitesCategoriaInterface {
 })
 export class CategoriasComponent implements OnInit {
 
-  public categoriasList: getCategoriasInterface[] = null;
-  public tramitesCategorias: tramitesCategoriaInterface[] = [];
+  public categoriasConTramites: categoriasConTramitesInterface[] = [];
+  public dependenciasConTramites: dependenciasConTramitesInterface[] = [];
+  public listaTramitesSelected: tramiteInterface[] = [];
 
-  public tramiteCategoriasSelected: tramitesCategoriaInterface = null;
+  public tramitesFrom: TRAMITES_FROM;
+
+  public loadingTramites: boolean = false;
+  public errorResponse: boolean = false;
+
+  public palabraBuscarInput: string = '';
+  public palabraBuscar: string = '';
 
   constructor(
     private wsTramitesService: TramitesService
   ) {
-    this.wsTramitesService
-      .getCategorias()
-      .then((categorias: getCategoriasInterface[]) => {
-        this.categoriasList = categorias;
-      })
-      .catch(err => {});
-  }
+    // Obtener categorías
+    this.wsTramitesService.getCategorias()
+      .then( ( response: getCategoriasInterface[] ) => {
+            response.forEach(categoria => {
 
-  ngOnInit() {
-    const instances = M.Collapsible.init(document.getElementById('categoriaListDOM'), { inDuration: 100, outDuration: 100, onOpenStart: this.collapsibleCategoriasOnOpenStart});
-  }
+              this.categoriasConTramites.push(
+                {
+                  id: categoria.id,
+                  descripcion: categoria.descripcion,
+                  orden: categoria.orden,
+                  tramites: []
+                }
+              );
 
-  collapsibleCategoriasOnOpenStart = ( event ) => {
-      const idCat = event.attributes.idcat.value;
-
-      this.getListaTramitesPorCategoria(idCat)
-        .subscribe( 
-          (lista:tramitesCategoriaInterface) => {
-            
-            lista.tramites.forEach( (tramite: getCategoriaInterface) => {
-              if (tramite.descripcion)
-                tramite.descripcion = tramite.descripcion.replace(/<h[^>]+>([^]*)<\/h[^>]+>.*/g,'')
             });
-
-            debugger;
-            this.tramiteCategoriasSelected = lista;
-            
-
-          },
-          ( error ) => {
-            
-            this.tramiteCategoriasSelected = null;
-
-          }
-        );
-  }
-
-
-  getListaTramitesPorCategoria(idCategoria: string): Observable<tramitesCategoriaInterface>{
-
-    return new Observable( (observer: Subscriber<tramitesCategoriaInterface> ) => {
-      
-      let lista: tramitesCategoriaInterface = null;
-
-      if (this.tramitesCategorias) {
-        
-        this.tramitesCategorias.forEach(categoriaTramite => {
-          if (categoriaTramite.idCat === idCategoria) {
-            lista = categoriaTramite;
-            return false;
-          }
-        });
-
-      }
-      
-      if (lista) { 
-        observer.next(lista);
-        observer.complete();
-      } else {
-        
-        this.wsTramitesService.getTramitesCategoria(idCategoria)
-        .then((categorias: getCategoriaInterface[]) => {
-          
-            const obj = {
-              idCat: idCategoria,
-              tramites: categorias
-            };
-            
-            this.tramitesCategorias.push(obj);
-            lista = obj;
-
-            observer.next(lista);
-            observer.complete();
           })
-          .catch(err => {
-            observer.error(err);
-          });
-        }
+      .catch( (err) => {
+
+      });
+
+    // Obtener dependencias
+    this.wsTramitesService.getDependencias()
+      .then( ( response: getDependenciasInterface[] ) => {
+            response.forEach(dependencia => {
+
+              this.dependenciasConTramites.push(
+                {
+                  id_dependencia : dependencia.id_dependencia,
+                  nombre_dependencia : dependencia.nombre_dependencia,
+                  tramites: []
+                }
+              );
+
+            });
+          })
+      .catch( (err) => {
 
       });
   }
-      
+
+  ngOnInit() {
+    M.Dropdown.init(document.querySelectorAll('.dropdownCategoriasAnchor, .dropdownDependenciasAnchor'), { constrainWidth : false });    
+  }
+
+  categoriaItemSelect( event, idCat ) {
+      this.loadingTramites = true;
+
+      let obj: categoriasConTramitesInterface  = this.categoriasConTramites.filter(x => x.id === idCat)[0];
+
+      this.listaTramitesSelected = [];
+      this.tramitesFrom = TRAMITES_FROM.CATEGORIA;
+
+      if (obj.tramites.length > 0) {
+        this.listaTramitesSelected = obj.tramites;
+        this.loadingTramites = false;
+      }
+
+      this.wsTramitesService.getTramitesCategoria(idCat)
+        .then( (response: tramiteInterface[]) => {
+            obj.tramites = response;
+            this.listaTramitesSelected = response;
+            this.loadingTramites = false;
+        })
+        .catch( (err) => {
+
+        });
+  }
+
+  dependenciaItemSelect( event, idDep ) {
+      this.loadingTramites = true;
+
+      let obj: dependenciasConTramitesInterface = this.dependenciasConTramites.filter(x => x.id_dependencia === idDep)[0];
+
+      this.listaTramitesSelected = [];
+      this.tramitesFrom = TRAMITES_FROM.DEPENDENCIA;
+
+      if (obj.tramites.length > 0) {
+        this.listaTramitesSelected = obj.tramites;
+        this.loadingTramites = false;
+        this.errorResponse = false;
+      }
+
+      this.wsTramitesService.getTramitesDependencia(idDep)
+        .then( (response: getCategoriaInterface[]) => {
+            obj.tramites = response;
+            this.listaTramitesSelected = response;
+            this.loadingTramites = false;
+            this.errorResponse = false;
+        })
+        .catch( (err) => {
+          this.loadingTramites = false;
+          this.errorResponse = true;
+        });
+  }
+
+  buscarTramite( event ) {
+
+    const palabra = event.target.value;
+
+    this.loadingTramites = true;
+
+    this.tramitesFrom = TRAMITES_FROM.BUSQUEDA;
+    this.palabraBuscarInput = '';
+    this.palabraBuscar = palabra;
+
+    this.wsTramitesService.getTramitesBusqueda(palabra)
+      .then( ( response: RegistroInterface[] ) => {
+
+        this.listaTramitesSelected = response;
+        this.loadingTramites = false;
+        this.errorResponse = false;
+
+      })
+      .catch ( (err) => {
+        this.loadingTramites = false;
+        this.errorResponse = true;
+      });
+
+  }
+
 }

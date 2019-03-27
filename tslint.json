@@ -74,6 +74,7 @@
     "no-trailing-whitespace": true,
     "ignore-comments": true,
     "ignore-blank-lines": true,
-    "ignore-empty-lines": true
+    "ignore-empty-lines": true,
+    "class-name": false
   }
 }

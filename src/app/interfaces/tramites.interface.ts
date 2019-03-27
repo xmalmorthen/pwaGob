@@ -10,55 +10,47 @@ export interface getCategoriasInterface {
   orden: string;
 }
 
-export interface getCategoriaInterface {
-  id_seccion: string;
-  id_tramite: string;
-  priority: string;
+export interface categoriasConTramitesInterface {
   id: string;
-  nombre: string;
-  url_ayuda?: any;
-  url_video?: string;
-  descripcion?: string;
-  url_tramite: string;
-  cve_retis?: string;
-  url_ficha: string;
-  id_dependencia: string;
-  id_dirgral?: string;
-  accesos: string;
-  metadatos: string;
-  id_tipo: string;
-  observaciones?: any;
-  FAct: string;
-  fcreacion?: string;
-  mantenimiento: string;
-  descripcion_mantenimiento?: any;
-  id_clasificacion: string;
-  Seccion: string;
-}
-
-export interface getTramiteInterface {
-  id: string;
-  nombre: string;
-  url_ayuda?: any;
-  url_video: string;
   descripcion: string;
-  url_tramite: string;
-  cve_retis?: any;
-  url_ficha: string;
-  id_dependencia: string;
-  id_dirgral: string;
-  accesos: string;
-  metadatos: string;
-  id_tipo: string;
-  observaciones?: any;
-  FAct: string;
-  fcreacion: string;
-  mantenimiento: string;
-  descripcion_mantenimiento?: any;
-  id_clasificacion: string;
+  orden: string;
+  tramites?: tramiteInterface[];
 }
 
 export interface getDependenciasInterface {
   id_dependencia: string;
   nombre_dependencia: string;
 }
+
+export interface dependenciasConTramitesInterface {
+  id_dependencia: string;
+  nombre_dependencia: string;
+  tramites?: tramiteInterface[];
+}
+
+export interface tramiteInterface {
+  id?: string;
+  nombre?: string;
+  url_ayuda?: any;
+  url_video?: string;
+  descripcion?: string;
+  url_tramite?: string;
+  cve_retis?: any;
+  url_ficha?: string;
+  id_dependencia?: string;
+  id_dirgral?: string;
+  accesos?: string;
+  metadatos?: string;
+  id_tipo?: string;
+  observaciones?: any;
+  FAct?: string;
+  fcreacion?: string;
+  mantenimiento?: string;
+  descripcion_mantenimiento?: any;
+  id_clasificacion?: string;
+  idTramite?: string;
+  Dependencia?: string;
+  TipoTramite?: string;
+  Contador?: string;
+}
+
