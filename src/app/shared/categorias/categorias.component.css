@@ -1,0 +1,26 @@
+.collapsible-body {
+    border-bottom: 1px solid #ddd;
+    padding: 0;
+}
+
+.collapsible-header {
+    background-color: transparent;
+}
+
+.collection .collection-item {
+    background-color: transparent;    
+    padding: 0px 15px;
+    min-height: 5em;
+}
+
+.collection-item .tramiteDescripcion{
+    text-align: justify!Important;
+}
+
+.collection-item .blockquote {
+    margin : 0;
+}
+
+.collection-item .botonera {
+    text-align: right;
+}

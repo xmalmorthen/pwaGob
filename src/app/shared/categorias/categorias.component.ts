@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, Subscriber } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 // SERVICES
 import { TramitesService } from 'src/app/services/service.index';
 
 // INTERFACES
 import { getCategoriasInterface, getCategoriaInterface } from 'src/app/interfaces/tramites.interface';
+
 
 declare const $: any;
 declare const M: any;
@@ -40,42 +43,74 @@ export class CategoriasComponent implements OnInit {
     const instances = M.Collapsible.init(document.getElementById('categoriaListDOM'), { inDuration: 100, outDuration: 100, onOpenStart: this.collapsibleCategoriasOnOpenStart});
   }
 
-  collapsibleCategoriasOnOpenStart = (event) => {
+  collapsibleCategoriasOnOpenStart = ( event ) => {
       const idCat = event.attributes.idcat.value;
 
-      this.tramiteCategoriasSelected = null;
+      this.getListaTramitesPorCategoria(idCat)
+        .subscribe( 
+          (lista:tramitesCategoriaInterface) => {
+            
+            lista.tramites.forEach( (tramite: getCategoriaInterface) => {
+              if (tramite.descripcion)
+                tramite.descripcion = tramite.descripcion.replace(/<h[^>]+>([^]*)<\/h[^>]+>.*/g,'')
+            });
+
+            debugger;
+            this.tramiteCategoriasSelected = lista;
+            
+
+          },
+          ( error ) => {
+            
+            this.tramiteCategoriasSelected = null;
+
+          }
+        );
+  }
+
+
+  getListaTramitesPorCategoria(idCategoria: string): Observable<tramitesCategoriaInterface>{
+
+    return new Observable( (observer: Subscriber<tramitesCategoriaInterface> ) => {
+      
+      let lista: tramitesCategoriaInterface = null;
 
       if (this.tramitesCategorias) {
-
+        
         this.tramitesCategorias.forEach(categoriaTramite => {
-          if (categoriaTramite.idCat === idCat) {
-            this.tramiteCategoriasSelected = categoriaTramite;
+          if (categoriaTramite.idCat === idCategoria) {
+            lista = categoriaTramite;
             return false;
           }
         });
 
       }
-
-      if (!this.tramiteCategoriasSelected) {
-
-        this.wsTramitesService.getTramitesCategoria(idCat)
-          .then((categorias: getCategoriaInterface[]) => {
-
+      
+      if (lista) { 
+        observer.next(lista);
+        observer.complete();
+      } else {
+        
+        this.wsTramitesService.getTramitesCategoria(idCategoria)
+        .then((categorias: getCategoriaInterface[]) => {
+          
             const obj = {
-              // tslint:disable-next-line:object-literal-shorthand
-              idCat: idCat,
+              idCat: idCategoria,
               tramites: categorias
             };
-
+            
             this.tramitesCategorias.push(obj);
-            this.tramiteCategoriasSelected = obj;
+            lista = obj;
 
+            observer.next(lista);
+            observer.complete();
           })
           .catch(err => {
-
+            observer.error(err);
           });
+        }
 
-      }
+      });
   }
-
+      
 }
