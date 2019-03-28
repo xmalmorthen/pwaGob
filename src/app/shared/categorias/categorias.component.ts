@@ -38,6 +38,9 @@ export class CategoriasComponent implements OnInit {
   public palabraBuscarInput: string = '';
   public palabraBuscar: string = '';
 
+  public categoriaSeleccionada: string = '';
+  public dependenciaSeleccionada: string = '';
+
   constructor(
     private wsTramitesService: TramitesService
   ) {
@@ -81,8 +84,13 @@ export class CategoriasComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
-    M.Dropdown.init(document.querySelectorAll('.dropdownCategoriasAnchor, .dropdownDependenciasAnchor'), { constrainWidth : false });    
+  ngOnInit() {}
+
+  ngAfterViewInit(){
+    const elements = document.querySelectorAll('.dropdownCategoriasAnchor, .dropdownDependenciasAnchor')
+    if (elements.length > 0) {
+      M.Dropdown.init(elements, { constrainWidth : false });
+    }
   }
 
   categoriaItemSelect( event, idCat ) {
@@ -92,6 +100,8 @@ export class CategoriasComponent implements OnInit {
 
       this.listaTramitesSelected = [];
       this.tramitesFrom = TRAMITES_FROM.CATEGORIA;
+
+      this.categoriaSeleccionada = obj.descripcion;
 
       if (obj.tramites.length > 0) {
         this.listaTramitesSelected = obj.tramites;
@@ -117,6 +127,8 @@ export class CategoriasComponent implements OnInit {
       this.listaTramitesSelected = [];
       this.tramitesFrom = TRAMITES_FROM.DEPENDENCIA;
 
+      this.dependenciaSeleccionada = obj.nombre_dependencia;
+
       if (obj.tramites.length > 0) {
         this.listaTramitesSelected = obj.tramites;
         this.loadingTramites = false;
@@ -124,7 +136,7 @@ export class CategoriasComponent implements OnInit {
       }
 
       this.wsTramitesService.getTramitesDependencia(idDep)
-        .then( (response: getCategoriaInterface[]) => {
+        .then( (response: tramiteInterface[]) => {
             obj.tramites = response;
             this.listaTramitesSelected = response;
             this.loadingTramites = false;

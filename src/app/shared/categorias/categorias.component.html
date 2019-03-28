@@ -17,7 +17,7 @@
       </li>
     </ul>
   </div>
-  <div class="input-field col s12 l5 m-2" *ngIf="busquedaSection">
+  <div class="input-field col s12" *ngIf="busquedaSection">
       <i class="material-icons prefix">search</i>
       <input id="buscarTramitePage" type="text" class="autocomplete" [(ngModel)]="palabraBuscarInput" (keyup.enter)="buscarTramite($event)">
       <label for="buscarTramitePage">Buscar trámite</label>
@@ -35,6 +35,16 @@
 </div>
 
 <div class="row">
+  <div class="col s12 m8" *ngIf="tramitesFrom == 0 && listaTramitesSelected.length > 0">
+    <h6>
+      <i class="left material-icons">search</i>Trámites de la categoría : <strong class='ml-2' style='font-size: 1.5em;'>{{ categoriaSeleccionada }}</strong>
+    </h6>
+  </div>
+  <div class="col s12 m8" *ngIf="tramitesFrom == 1 && listaTramitesSelected.length > 0">
+    <h6>
+      <i class="left material-icons">search</i>Trámites de la dependencia : <strong class='ml-2' style='font-size: 1.5em;'>{{ dependenciaSeleccionada }}</strong>
+    </h6>
+  </div>
   <div class="col s12 m8" *ngIf="tramitesFrom == 2">
     <h6>
       <i class="left material-icons">search</i>Palabra buscada : <strong class='ml-2' style='font-size: 1.5em;'>{{ this.palabraBuscar }}</strong>
