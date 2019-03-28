@@ -18,7 +18,7 @@
       [streetViewControl]="false"
       [mapTypeControl]="true"
       [zoomControl]="false"
-      (mapClick)="close_window($event)">
+      (mapClick)="close_window()">
       <agm-marker
         *ngFor="let marker of this.location.markers; let i = index"
         [latitude]="marker.lat"

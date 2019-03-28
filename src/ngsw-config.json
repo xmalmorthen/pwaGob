@@ -3,24 +3,49 @@
   "assetGroups": [
     {
       "name": "app",
-      "installMode": "prefetch",
+      "installMode": "lazy",
+      "updateMode": "lazy",
       "resources": {
         "files": [
           "/favicon.ico",
           "/index.html",
           "/*.css",
-          "/*.js"
+          "/*.js",
+          "/manifest.json"
+        ],
+        "urls":[
+          "https://fonts.googleapis.com/**",
+          "http://code.jquery.com/**",
+          "https://cdnjs.cloudflare.com/ajax/libs/popper.js/**" ,
+          "https://fonts.gstatic.com/s/materialicons/**"
         ]
       }
-    }, {
+    }, 
+    {
       "name": "assets",
+      "updateMode": "lazy",
       "installMode": "lazy",
-      "updateMode": "prefetch",
       "resources": {
         "files": [
           "/assets/**",
           "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
+      }
+    }
+  ],
+  "dataGroups":[
+    {
+      "name": "apis",
+      "urls": [
+        "https://www.secfin.col.gob.mx/wsKioscos/**",
+        "http://www.openapis.col.gob.mx/serviciosenlinea/**",
+        "http://www.openapis.col.gob.mx/API_PU/**"
+      ],
+      "cacheConfig": {
+        "maxSize": 50,
+        "maxAge": "3h",
+        "timeout": "8s",
+        "strategy": "freshness"
       }
     }
   ]
