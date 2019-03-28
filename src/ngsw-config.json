@@ -39,7 +39,8 @@
       "urls": [
         "https://www.secfin.col.gob.mx/wsKioscos/**",
         "http://www.openapis.col.gob.mx/serviciosenlinea/**",
-        "http://www.openapis.col.gob.mx/API_PU/**"
+        "http://www.openapis.col.gob.mx/API_PU/**",
+        "http://directoriointegral.col.gob.mx/index.php/api/rest/**"
       ],
       "cacheConfig": {
         "maxSize": 50,

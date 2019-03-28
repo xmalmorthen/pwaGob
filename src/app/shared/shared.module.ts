@@ -6,13 +6,16 @@ import { FormsModule } from '@angular/forms';
 
 // PAGES
 import { CategoriasComponent } from './categorias/categorias.component';
+import { DirectorioComponent } from './directorio/directorio.component';
 
 @NgModule({
   declarations: [
-    CategoriasComponent
+    CategoriasComponent,
+    DirectorioComponent
   ],
   exports: [
-    CategoriasComponent
+    CategoriasComponent,
+    DirectorioComponent
   ],
   imports : [
     CommonModule,

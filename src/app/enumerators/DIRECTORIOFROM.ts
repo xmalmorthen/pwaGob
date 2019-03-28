@@ -1,0 +1,5 @@
+export enum DIRECTORIO_FROM {
+  SECRETARIOS = 0,
+  DEPENDENCIA = 1,
+  BUSQUEDA = 2
+}

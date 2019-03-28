@@ -1,0 +1,24 @@
+<h5><i class="left material-icons">list</i>Directorio integral de Gobierno del Estado de Colima</h5>
+
+<div class="row">
+  <div class="col s12 l3 m-2" *ngIf="secretariosSection">
+    <a class="btn" (click)="getSecretarios()"><i class="material-icons left">cloud</i>Secretarios</a>
+  </div>
+  <div class="col s12 l3 m-2" *ngIf="dependenciasSection">
+    <a class="btn" (click)="getDependencias()"><i class="material-icons left">cloud</i>Dependencias</a>
+  </div>
+  <div class="input-field col s12" *ngIf="busquedaSection">
+    <i class="material-icons prefix">search</i>
+      <input id="buscarTramitePage" type="text" class="autocomplete" [(ngModel)]="buscarInput" (keyup.enter)="buscarFuncionario($event)">
+      <label for="buscarTramitePage">Buscar funcionario</label>
+  </div>
+</div>
+
+<ul class="collection">
+  <li class="collection-item avatar" *ngFor="let item of collectionList">
+    <img [src]='item.PATH + "/" + item.FotoFuncionario' alt="{{item.TITULAR}}" class="circle" *ngIf="item.FotoFuncionario">
+    <span class="title">{{ item.TITULAR }}</span>
+    <p>{{ item.CARGO }}</p>
+    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+  </li>  
+</ul>

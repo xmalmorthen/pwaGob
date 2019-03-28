@@ -8,7 +8,7 @@ export class GeoLicationService {
   constructor() { }
 
   public getCurrentPosition() {
-    return new Promise( (resolve,reject) => {
+    return new Promise( (resolve, reject) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
           resolve(pos);

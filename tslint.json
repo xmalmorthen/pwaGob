@@ -77,6 +77,7 @@
     "ignore-empty-lines": true,
     "class-name": false,
     "no-input-rename": false,
-    "no-inferrable-types": false
+    "no-inferrable-types": false,
+    "prefer-const": false
   }
 }

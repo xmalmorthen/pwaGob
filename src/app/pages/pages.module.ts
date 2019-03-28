@@ -10,24 +10,27 @@ import { AgmDirectionModule } from 'agm-direction';
 // SUB MODULES
 import { SharedModule } from '../shared/shared.module';
 
-//PAGES
+// PAGES
 import { PrincipalComponent } from './principal/principal.component';
 import { TramitesServiciosComponent } from './tramites-servicios/tramites-servicios.component';
 import { ContactanosComponent } from './contactanos/contactanos.component';
 import { UbicanosComponent } from './ubicanos/ubicanos.component';
+import { DirectorioGobiernoComponent } from './directorio-gobierno/directorio-gobierno.component';
 
 @NgModule({
   declarations: [
     PrincipalComponent,
     TramitesServiciosComponent,
     ContactanosComponent,
-    UbicanosComponent
+    UbicanosComponent,
+    DirectorioGobiernoComponent
   ],
   exports: [
     PrincipalComponent,
     TramitesServiciosComponent,
     ContactanosComponent,
-    UbicanosComponent
+    UbicanosComponent,
+    DirectorioGobiernoComponent
   ],
   imports : [
     CommonModule,

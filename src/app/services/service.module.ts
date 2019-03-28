@@ -4,8 +4,9 @@ import { CommonModule } from '@angular/common';
 import {
   GeoLicationService,
   WsKioscosService,
-  TramitesService
-} from "./service.index";
+  TramitesService,
+  DirectorioIntegralService
+} from './service.index';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import {
   providers : [
     GeoLicationService,
     WsKioscosService,
-    TramitesService
+    TramitesService,
+    DirectorioIntegralService
   ],
   declarations: []
 })

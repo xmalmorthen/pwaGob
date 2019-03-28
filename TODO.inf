@@ -1,0 +1,2 @@
+. Continuar la implementación del componente directorio integral
+    - Continuar desde el maquetado, se estaba desarrollando la parte de mostrar icono por default cuando no se encuentre imágen de funcionario en la parte de secretarios [ src\app\shared\directorio\directorio.component.html ]
